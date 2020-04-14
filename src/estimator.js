@@ -23,11 +23,13 @@ const estimationHelper = (data, infectedPeople) => {
   const currentlyInfected = reportedCases * infectedPeople;
   const periodNormalized = normalizePeriod(periodType, timeToElapse);
   const infectedPeriod = Math.trunc(periodNormalized / 3);
-  const infectionsByRequestedTime = currentlyInfected * (2 ** infectedPeriod);
-  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
-  const hospitalBedsByRequestedTime = (0.35 * totalHospitalBeds) - severeCasesByRequestedTime;
-  const casesForICUByRequestedTime = 0.05 * infectionsByRequestedTime;
-  const casesForVentilatorsByRequestTime = 0.02 * infectionsByRequestedTime;
+  const infectionsByRequestedTime = Math.trunc(currentlyInfected * (2 ** infectedPeriod));
+  const severeCasesByRequestedTime = Math.trunc(0.15 * infectionsByRequestedTime);
+  const hospitalBedsByRequestedTime = Math.trunc(
+    (0.35 * totalHospitalBeds) - severeCasesByRequestedTime
+  );
+  const casesForICUByRequestedTime = Math.trunc(0.05 * infectionsByRequestedTime);
+  const casesForVentilatorsByRequestTime = Math.trunc(0.02 * infectionsByRequestedTime);
   const dollarsInFlight = Math.trunc(infectionsByRequestedTime
     * avgDailyIncomePopulation
     * avgDailyIncomeInUSD * periodNormalized);
